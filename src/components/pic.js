@@ -11,7 +11,8 @@ class Pic extends Component {
       loading: false,
       imageTitle: null,
       imageUrl: null,
-      explanation:null
+      explanation:null,
+      media:null
     }
      this.getNewPrevDate = this.getNewPrevDate.bind(this);
      this.getNewForwardDate = this.getNewForwardDate.bind(this);
@@ -34,13 +35,17 @@ class Pic extends Component {
  mm = String(today.getMonth() + 1).padStart(2, '0');
  result = yyyy + '-' + mm + '-' + dd;
   }
-  // uZddFwu88xpWSuIZb5BUl4DzlVlHZcYt3F2ibJ9H
-  // https://api.nasa.gov/neo/rest/v1/feed?start_date=2015-09-07&end_date=2015-09-08&api_key=DEMO_KEY
   async componentDidMount(){
     let url=`https://api.nasa.gov/planetary/apod?api_key=uZddFwu88xpWSuIZb5BUl4DzlVlHZcYt3F2ibJ9H&date=${result}`
   let data=await fetch(url)
   let parsedData=await data.json()
-  this.setState({imageTitle:parsedData.title,imageUrl:parsedData.url,explanation:parsedData.explanation,dater:today})
+  this.setState({imageTitle:parsedData.title,explanation:parsedData.explanation,media:parsedData.media_type})
+  if(this.state.media="image"){
+    this.setState({imageUrl:parsedData.url})
+  }
+  else{
+    this.setState({imageUrl:null})
+  }
   }
 
   render() {
@@ -48,7 +53,7 @@ class Pic extends Component {
       <div>
         <h3 className="fs-3 fst-italic text-warning">{result}</h3>
         <h3 className='mt-4'>{this.state.imageTitle}</h3>
-        <img className="img-thumbnail m-5" src={this.state.imageUrl} alt=" "/>
+        <img className="img-thumbnail m-5 text-dark" src={this.state.imageUrl} alt="A video exists here"/>
       <p className='m-4'>{this.state.explanation}</p>
       <div className='yo'>
    <nav aria-label="Page navigation example" className='mt-4'>
